@@ -110,3 +110,9 @@ __END__
 --- expected
 (statements (string "\0"))
 
+===
+--- code
+qq<x:$y>
+--- expected
+(statements (string_concat (string "x:") (variable "$y")))
+
