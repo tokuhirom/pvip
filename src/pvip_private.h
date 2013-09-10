@@ -18,6 +18,7 @@ typedef struct {
     PVIPNode *root;
     int is_string; /* Parsing from string or file pointer. */
     PVIPParserStringState *str;
+    PVIPNode *literal_str; /* temporary space for string literal */
     FILE *fp;
 } PVIPParserContext;
 
