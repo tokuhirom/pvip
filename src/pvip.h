@@ -206,6 +206,8 @@ typedef enum {
     PVIP_NODE_TW_TMPDIR, /* $*TMPDIR */
     PVIP_NODE_IS_RW, /* is rw */
     PVIP_NODE_IS_REF, /* is ref */
+    PVIP_NODE_PI, /* PI */
+    PVIP_NODE_E, /* e */
 } PVIP_node_type_t;
 
 typedef enum {
@@ -243,13 +245,18 @@ typedef struct _PVIPNode {
     };
 } PVIPNode;
 
+// memory pool
+struct pvip_t;
+typedef struct pvip_t pvip_t;
+struct pvip_t* pvip_new();
+void pvip_free(struct pvip_t* pvip);
+
 /* parser related public apis */
-PVIPNode * PVIP_parse_string(const char *string, int len, int debug, PVIPString **error);
-PVIPNode * PVIP_parse_fp(FILE *fp, int debug, PVIPString **error);
+PVIPNode * PVIP_parse_string(struct pvip_t* pvip, const char *string, int len, int debug, PVIPString **error);
+PVIPNode * PVIP_parse_fp(struct pvip_t* pvip, FILE *fp, int debug, PVIPString **error);
 
 
 /* node related public apis */
-void PVIP_node_destroy(PVIPNode *node);
 const char* PVIP_node_name(PVIP_node_type_t t);
 PVIP_category_t PVIP_node_category(PVIP_node_type_t type);
 void PVIP_node_as_sexp(PVIPNode * node, PVIPString *buf);

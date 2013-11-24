@@ -14,8 +14,73 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
 
-PVIPNode * PVIP_node_new_int(PVIP_node_type_t type, int64_t n) {
-    PVIPNode *node = malloc(sizeof(PVIPNode));
+#define PVIP_ARENA_SIZE 1024
+
+#define ALLOC_CHECK(p) \
+    do { \
+        if (!p) { \
+            fprintf(stderr, "[PVIP] Cannot allocate memory"); \
+            abort(); \
+        } \
+    } while (0)
+
+struct pvip_arena {
+    struct pvip_arena* next;
+    int idx;
+    PVIPNode nodes[PVIP_ARENA_SIZE];
+};
+
+typedef struct pvip_t {
+    struct pvip_arena* arena;
+} pvip_t;
+
+struct pvip_t* pvip_new() {
+    pvip_t* pvip = malloc(sizeof(pvip_t));
+    ALLOC_CHECK(pvip);
+    pvip->arena = malloc(sizeof(struct pvip_arena));
+    memset(pvip->arena, 0, sizeof(struct pvip_arena));
+    return pvip;
+}
+
+// basic memory pool
+PVIPNode* pvip_node_alloc(struct pvip_t* pvip) {
+    if (pvip->arena->idx==PVIP_ARENA_SIZE) {
+        struct pvip_arena* arena = malloc(sizeof(struct pvip_arena));
+        ALLOC_CHECK(arena);
+        arena->next = pvip->arena;
+        pvip->arena = arena;
+    }
+    return &(pvip->arena->nodes[pvip->arena->idx++]);
+}
+
+void pvip_free(struct pvip_t* pvip) {
+    struct pvip_arena* arena = pvip->arena;
+    while (arena) {
+        int i;
+        for (i=0; i<arena->idx; ++i) {
+            PVIPNode* node = &(arena->nodes[i]);
+            switch (PVIP_node_category(node->type)) {
+            case PVIP_CATEGORY_CHILDREN:
+                free(node->children.nodes);
+                break;
+            case PVIP_CATEGORY_STRING:
+                PVIP_string_destroy(node->pv);
+                break;
+            case PVIP_CATEGORY_UNKNOWN:
+            case PVIP_CATEGORY_INT:
+            case PVIP_CATEGORY_NUMBER:
+                break; // nop
+            }
+        }
+        struct pvip_arena* next =  arena->next;
+        free(arena);
+        arena = next;
+    }
+    free(pvip);
+}
+
+PVIPNode * PVIP_node_new_int(PVIPParserContext* parser, PVIP_node_type_t type, int64_t n) {
+    PVIPNode *node = pvip_node_alloc(parser->pvip);
     assert(PVIP_node_category(type) == PVIP_CATEGORY_INT);
     node->type = type;
     node->iv = n;
@@ -23,7 +88,7 @@ PVIPNode * PVIP_node_new_int(PVIP_node_type_t type, int64_t n) {
     return node;
 }
 
-PVIPNode * PVIP_node_new_intf(PVIP_node_type_t type, const char *str, size_t len, int base) {
+PVIPNode * PVIP_node_new_intf(PVIPParserContext* parser, PVIP_node_type_t type, const char *str, size_t len, int base) {
     char * buf = malloc(len+1);
     char *bufp = buf;
     int i;
@@ -35,11 +100,11 @@ PVIPNode * PVIP_node_new_intf(PVIP_node_type_t type, const char *str, size_t len
     *bufp++ = '\0';
     int64_t n = strtoll(buf, NULL, base);
     free(buf);
-    return PVIP_node_new_int(type, n);
+    return PVIP_node_new_int(parser, type, n);
 }
 
-PVIPNode * PVIP_node_new_string(PVIP_node_type_t type, const char* str, size_t len) {
-    PVIPNode *node = malloc(sizeof(PVIPNode));
+PVIPNode * PVIP_node_new_string(PVIPParserContext* parser, PVIP_node_type_t type, const char* str, size_t len) {
+    PVIPNode *node = pvip_node_alloc(parser->pvip);
     assert(
          type != PVIP_NODE_IDENT
       || type != PVIP_NODE_VARIABLE
@@ -58,7 +123,7 @@ PVIPNode* PVIP_node_append_string(PVIPParserContext *parser, PVIPNode *node, con
             PVIP_string_concat(node->children.nodes[node->children.size-1]->pv, txt, length);
             return node;
         } else {
-            PVIPNode *s = PVIP_node_new_string(PVIP_NODE_STRING, txt, length);
+            PVIPNode *s = PVIP_node_new_string(parser, PVIP_NODE_STRING, txt, length);
             return PVIP_node_new_children2(parser, PVIP_NODE_STRING_CONCAT, node, s);
         }
     }
@@ -130,7 +195,7 @@ PVIPNode* PVIP_node_new_number(PVIP_node_type_t type, const char *str, size_t le
 }
 
 PVIPNode* PVIP_node_new_children(PVIPParserContext *parser, PVIP_node_type_t type) {
-    PVIPNode *node = malloc(sizeof(PVIPNode));
+    PVIPNode *node = pvip_node_alloc(parser->pvip);
     memset(node, 0, sizeof(PVIPNode));
     assert(type != PVIP_NODE_NUMBER);
     assert(type != PVIP_NODE_INT);
@@ -235,18 +300,6 @@ PVIP_category_t PVIP_node_category(PVIP_node_type_t type) {
     }
 }
 
-void PVIP_node_destroy(PVIPNode *node) {
-    PVIP_category_t category = PVIP_node_category(node->type);
-    if (category == PVIP_CATEGORY_CHILDREN) {
-        int i;
-        for (i=0; i<node->children.size; i++) {
-            PVIP_node_destroy(node->children.nodes[i]);
-        }
-    } else if (category == PVIP_CATEGORY_STRING) {
-        PVIP_string_destroy(node->pv);
-    }
-    free(node);
-}
 static void _PVIP_node_as_sexp(PVIPNode * node, PVIPString *buf, int indent) {
     assert(node);
 

@@ -18,7 +18,9 @@ typedef struct {
     PVIPNode *root;
     int is_string; /* Parsing from string or file pointer. */
     PVIPParserStringState *str;
+    PVIPNode *literal_str; /* temporary space for string literal */
     FILE *fp;
+    pvip_t* pvip;
 } PVIPParserContext;
 
 /* node */
@@ -28,9 +30,9 @@ PVIPNode* PVIP_node_new_children2(PVIPParserContext*parser, PVIP_node_type_t typ
 PVIPNode* PVIP_node_new_children3(PVIPParserContext*parser, PVIP_node_type_t type, PVIPNode* n1, PVIPNode *n2, PVIPNode *n3);
 PVIPNode* PVIP_node_new_children4(PVIPParserContext*parser, PVIP_node_type_t type, PVIPNode* n1, PVIPNode *n2, PVIPNode *n3, PVIPNode *n4);
 PVIPNode* PVIP_node_new_children5(PVIPParserContext*parser, PVIP_node_type_t type, PVIPNode* n1, PVIPNode *n2, PVIPNode *n3, PVIPNode *n4, PVIPNode *n5);
-PVIPNode* PVIP_node_new_int(PVIP_node_type_t type, int64_t n);
-PVIPNode* PVIP_node_new_intf(PVIP_node_type_t type, const char *str, size_t len, int base);
-PVIPNode* PVIP_node_new_string(PVIP_node_type_t type, const char* str, size_t len);
+PVIPNode* PVIP_node_new_int(PVIPParserContext* parser, PVIP_node_type_t type, int64_t n);
+PVIPNode* PVIP_node_new_intf(PVIPParserContext* parser, PVIP_node_type_t type, const char *str, size_t len, int base);
+PVIPNode* PVIP_node_new_string(PVIPParserContext* parser, PVIP_node_type_t type, const char* str, size_t len);
 PVIPNode* PVIP_node_new_number(PVIP_node_type_t type, const char *str, size_t len);
 
 void PVIP_node_push_child(PVIPNode* node, PVIPNode* child);

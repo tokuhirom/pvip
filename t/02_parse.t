@@ -3,6 +3,36 @@ use t::ParserTest;
 __END__
 
 ===
+--- code: True
+--- expected
+(statements (true))
+
+===
+--- code: q@hoge@
+--- expected
+(statements (string "hoge"))
+
+===
+--- code: q,hoge,
+--- expected
+(statements (string "hoge"))
+
+===
+--- code: q~hoge~
+--- expected
+(statements (string "hoge"))
+
+===
+--- code: elems({})
+--- expected
+(statements (funcall (ident "elems") (args (hash))))
+
+===
+--- code: False
+--- expected
+(statements (false))
+
+===
 --- code: 33
 --- expected
 (statements (int 33))
@@ -126,6 +156,14 @@ __END__
 --- code: "H" ~ "M"
 --- expected
 (statements (string_concat (string "H") (string "M")))
+
+===
+--- code: if True {say(4)}
+--- expected
+(statements
+    (if (true)
+        (statements
+            (funcall (ident "say") (args (int 4))))))
 
 ===
 --- code: if 1 {say(4)}
@@ -375,3 +413,10 @@ Foo.new().bar()
 [min] 1..3
 --- expected
 (statements (reduce (string "min") (range (int 1) (int 3))))
+
+===
+--- code
+if 1 {4} else { }
+--- expected
+(statements (if (int 1) (statements (int 4))))
+

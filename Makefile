@@ -1,7 +1,7 @@
-CFLAGS=-Wall -DYY_DEBUG=1 -g
+CFLAGS=-Wall -fPIC -g
+# CFLAGS+= -DYY_DEBUG=1 -DDEBUG_PARSE
 # -std=c89
 CC=cc
-CFLAGS=-fPIC
 
 all: pvip
 
@@ -21,7 +21,8 @@ t/c_level.t: src/c_level_test.o libpvip.a
 	$(CC) $(CFLAGS) -o t/c_level.t src/c_level_test.o libpvip.a
 
 src/main.o: src/pvip.h
-src/pvip_node.o: src/pvip.h
+src/pvip_node.o: src/pvip.h src/pvip_private.h
+src/gen.pvip.y.o: src/pvip.h src/pvip_private.h
 
 src/gen.node.c: build/node.pl src/pvip.h
 	perl build/node.pl

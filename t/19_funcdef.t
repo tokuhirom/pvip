@@ -17,7 +17,7 @@ sub ok_auto { }
 --- code
 sub is-true() { True }
 --- expected
-(statements (func (ident "is-true") (params) (nop) (block (statements (ident "True")))))
+(statements (func (ident "is-true") (params) (nop) (block (statements (true)))))
 
 ===
 --- code
