@@ -1,6 +1,8 @@
 PVIP - Perl6 parser library
 ===========================
 
+[![Build Status](https://travis-ci.org/tokuhirom/pvip.svg?branch=master)](https://travis-ci.org/tokuhirom/pvip)
+
 This is a Perl6 parser library written in C.
 
 Runtime deps
