@@ -393,3 +393,10 @@ Foo.new().bar()
 [min] 1..3
 --- expected
 (statements (reduce (string "min") (range (int 1) (int 3))))
+
+===
+--- code
+if 1 {4} else { }
+--- expected
+(statements (if (int 1) (statements (int 4))))
+

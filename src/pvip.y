@@ -281,9 +281,11 @@ if_stmt = { if_body=NULL; } 'if' - if_cond:expr - '{' - if_body:statementlist? -
             }
         )*
         (
-            ws+ 'else' ws+ - '{' - else_body:statementlist - '}' {
-                PVIP_node_change_type(else_body, PVIP_NODE_ELSE);
-                PVIP_node_push_child(if_cond, else_body);
+            ws+ 'else' ws+ - '{' - else_body:statementlist? - '}' {
+                if (else_body) {
+                    PVIP_node_change_type(else_body, PVIP_NODE_ELSE);
+                    PVIP_node_push_child(if_cond, else_body);
+                }
             }
         )? { $$=if_cond; }
 
@@ -735,7 +737,7 @@ twvars =
     | '$^c' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TW_C); }
     | '$*TMPDIR' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TW_TMPDIR); }
 
-reserved = ( 'True' | 'False' | 'pi' | 'my' | 'our' | 'until' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'e' | 'time' | 'now' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' | 'or' ) ![-A-Za-z0-9]
+reserved = ( 'True' | 'False' | 'pi' | 'my' | 'our' | 'until' | 'while' | 'unless' | 'if' | 'elsif' | 'else' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'e' | 'time' | 'now' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' | 'or' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ROLE, i, b); }
