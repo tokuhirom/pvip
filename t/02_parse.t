@@ -138,6 +138,14 @@ __END__
 (statements (string_concat (string "H") (string "M")))
 
 ===
+--- code: if True {say(4)}
+--- expected
+(statements
+    (if (true)
+        (statements
+            (funcall (ident "say") (args (int 4))))))
+
+===
 --- code: if 1 {say(4)}
 --- expected
 (statements
