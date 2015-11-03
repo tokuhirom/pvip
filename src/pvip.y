@@ -680,6 +680,8 @@ term =
     | perl5_regexp
     | 'm:P5/./' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_NOP); }
     | regexp
+    | 'True' ![-a-zA-Z0-9] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TRUE); }
+    | 'False' ![-a-zA-Z0-9] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_FALSE); }
     | !reserved ident
     | < 'class' > { $$ = PVIP_node_new_string(PVIP_NODE_IDENT, yytext, yyleng); }
     | pair

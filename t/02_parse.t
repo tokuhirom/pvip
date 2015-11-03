@@ -3,6 +3,16 @@ use t::ParserTest;
 __END__
 
 ===
+--- code: True
+--- expected
+(statements (true))
+
+===
+--- code: False
+--- expected
+(statements (false))
+
+===
 --- code: 33
 --- expected
 (statements (int 33))
