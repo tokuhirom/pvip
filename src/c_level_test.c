@@ -7,6 +7,8 @@ int main() {
     C=0;
     printf("1..2\n");
 
+    pvip_t* pvip = pvip_new();
+
     {
         PVIPString * x = PVIP_string_new();
         PVIP_string_printf(x, "%s%d", "hoge", 2);
@@ -19,13 +21,15 @@ int main() {
     }
 
     {
-        PVIPNode *node = PVIP_parse_string("\n", 1, 0, NULL);
+        PVIPNode *node = PVIP_parse_string(pvip, "\n", 1, 0, NULL);
         if (node) {
             printf("ok 2\n");
-            PVIP_node_destroy(node);
         } else {
             printf("not ok 2\n");
         }
     }
+
+    pvip_free(pvip);
+
     return 0;
 }

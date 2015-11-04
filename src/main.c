@@ -29,10 +29,12 @@ int main(int argc, char **argv) {
     command_option(&cmd, "-e", "--eval [code]", "eval code", eval);
     command_parse(&cmd, argc, argv);
 
+    pvip_t* pvip = pvip_new();
+
     if (state->eval) {
         const char *src = state->eval;
         PVIPString *error;
-        PVIPNode *node = PVIP_parse_string(src, strlen(src), state->debug, &error);
+        PVIPNode *node = PVIP_parse_string(pvip, src, strlen(src), state->debug, &error);
         if (!node) {
             PVIP_string_say(error);
             PVIP_string_destroy(error);
@@ -41,8 +43,6 @@ int main(int argc, char **argv) {
         }
 
         PVIP_node_dump_sexp(node);
-
-        PVIP_node_destroy(node);
     } else if (cmd.argc==1) {
         FILE *fp = fopen(cmd.argv[0], "rb");
         if (!fp) {
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
             exit(1);
         }
         PVIPString *error;
-        PVIPNode *node = PVIP_parse_fp(fp, state->debug, &error);
+        PVIPNode *node = PVIP_parse_fp(pvip, fp, state->debug, &error);
         if (!node) {
             PVIP_string_say(error);
             PVIP_string_destroy(error);
@@ -58,11 +58,10 @@ int main(int argc, char **argv) {
             exit(1);
         }
         PVIP_node_dump_sexp(node);
-        PVIP_node_destroy(node);
         fclose(fp);
     } else if (cmd.argc==0) {
         PVIPString *error;
-        PVIPNode *node = PVIP_parse_fp(stdin, state->debug, &error);
+        PVIPNode *node = PVIP_parse_fp(pvip, stdin, state->debug, &error);
         if (!node) {
             PVIP_string_say(error);
             PVIP_string_destroy(error);
@@ -70,10 +69,10 @@ int main(int argc, char **argv) {
             exit(1);
         }
         PVIP_node_dump_sexp(node);
-        PVIP_node_destroy(node);
     } else {
         command_help(&cmd);
     }
+    pvip_free(pvip);
     free(state);
     command_free(&cmd);
     return 0;
