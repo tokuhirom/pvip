@@ -13,6 +13,10 @@ PVIPString *PVIP_string_new() {
     str->len    = 0;
     str->buflen = 1024;
     str->buf    = malloc(str->buflen);
+    if (!str->buf) {
+        fprintf(stderr, "Cannot allocate memory\n");
+        abort();
+    }
     return str;
 }
 
