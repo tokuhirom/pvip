@@ -18,6 +18,8 @@ int main() {
         } else {
             printf("not ok 1\n");
         }
+
+        PVIP_string_destroy(x);
     }
 
     {
