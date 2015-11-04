@@ -242,6 +242,7 @@ void PVIP_node_destroy(PVIPNode *node) {
         for (i=0; i<node->children.size; i++) {
             PVIP_node_destroy(node->children.nodes[i]);
         }
+        free(node->children.nodes);
     } else if (category == PVIP_CATEGORY_STRING) {
         PVIP_string_destroy(node->pv);
     }
