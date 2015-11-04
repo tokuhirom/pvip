@@ -148,7 +148,6 @@ statement =
             | unless_stmt
             | module_stmt
             | multi_method_stmt
-            | die_stmt
             | package_stmt
             | has_stmt
             | '...' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_STUB); }
@@ -236,8 +235,6 @@ use_stmt =
 pkg_name = < [a-zA-Z] [a-zA-Z0-9_]* ( '::' [a-zA-Z0-9_]+ )* > {
     $$ = PVIP_node_new_string(&(G->data), PVIP_NODE_IDENT, yytext, yyleng);
 }
-
-die_stmt = 'die' ws e:expr eat_terminator { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_DIE, e); }
 
 while_stmt =
     w:while_until - cond:expr { PVIP_node_push_child(w,cond); } - (
