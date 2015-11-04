@@ -8,13 +8,16 @@
 
 PVIPString *PVIP_string_new() {
     PVIPString *str = malloc(sizeof(PVIPString));
+    if (!str) {
+        fprintf(stderr, "[PVIP] Cannot allocate memory\n");
+        abort();
+    }
     memset(str, 0, sizeof(PVIPString));
-    assert(str);
     str->len    = 0;
     str->buflen = 1024;
     str->buf    = malloc(str->buflen);
     if (!str->buf) {
-        fprintf(stderr, "Cannot allocate memory\n");
+        fprintf(stderr, "[PVIP] Cannot allocate memory\n");
         abort();
     }
     return str;
