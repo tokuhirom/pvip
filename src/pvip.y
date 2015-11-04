@@ -788,6 +788,7 @@ hash = '{' -
     p1:pair { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_HASH, p1); p1=$$; } ( -  ',' - p2:pair { PVIP_node_push_child(p1, p2); $$=p1; } )*
     ','?
     - '}' { $$=p1; }
+    | '{' - '}' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_HASH); }
 
 pair =
     k:hash_key - '=>' - v:loose_unary_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, k, v); }

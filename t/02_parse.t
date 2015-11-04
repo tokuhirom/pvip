@@ -8,6 +8,11 @@ __END__
 (statements (true))
 
 ===
+--- code: elems({})
+--- expected
+(statements (funcall (ident "elems") (args (hash))))
+
+===
 --- code: False
 --- expected
 (statements (false))

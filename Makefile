@@ -1,5 +1,5 @@
 CFLAGS=-Wall -fPIC -g
-# CFLAGS+=-DYY_DEBUG=1
+# CFLAGS+= -DYY_DEBUG=1 -DDEBUG_PARSE
 # -std=c89
 CC=cc
 
