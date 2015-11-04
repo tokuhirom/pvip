@@ -13,7 +13,7 @@
 #define NEWLINE G->data.line_number++
 #define ENTER do { \
         G->data.line_number_stack_size++; \
-        G->data.line_number_stack = realloc(G->data.line_number_stack, G->data.line_number_stack_size); \
+        G->data.line_number_stack = realloc(G->data.line_number_stack, sizeof(int)*G->data.line_number_stack_size); \
         if (!G->data.line_number_stack) { \
             abort(); \
         } \
@@ -1254,6 +1254,7 @@ PVIPNode * PVIP_parse_string(pvip_t* pvip, const char *string, int len, int debu
 
 finished:
 
+    free(g.data.line_number_stack);
     free(g.data.str);
     assert(g.data.root);
     YY_NAME(deinit)(&g);
@@ -1324,6 +1325,7 @@ PVIPNode * PVIP_parse_fp(pvip_t* pvip, FILE *fp, int debug, PVIPString **error) 
       }
       return NULL;
     }
+    free(g.data.line_number_stack);
     free(g.data.str);
     PVIPNode *root = g.data.root;
     assert(g.data.root);
