@@ -8,6 +8,11 @@ __END__
 (statements (true))
 
 ===
+--- code: q@hoge@
+--- expected
+(statements (string "hoge"))
+
+===
 --- code: q~hoge~
 --- expected
 (statements (string "hoge"))
