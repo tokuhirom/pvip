@@ -8,6 +8,11 @@ __END__
 (statements (true))
 
 ===
+--- code: q~hoge~
+--- expected
+(statements (string "hoge"))
+
+===
 --- code: elems({})
 --- expected
 (statements (funcall (ident "elems") (args (hash))))
