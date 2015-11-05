@@ -46,16 +46,24 @@ elems = (
         }
         (
             - e2:elem {
-                PVIP_node_push_child(e1, e2);
+                qre_node_push_child(e1, e2);
                 $$=e1;
             }
         )*
     )
     | ws* { $$=NOP(); }
 
-elem = .
+elem =
+    <[A-Za-z0-9]+> {
+        $$ = qre_node_new_str(&(G->data), QRE_NODE_STRING, yytext, yyleng);
+    }
+    | <.> {
+        $$ = qre_node_new_str(&(G->data), QRE_NODE_STRING, yytext, yyleng);
+    }
 
 - = ws*
+
+esc = '\\'
 
 ws = 
     '\n'

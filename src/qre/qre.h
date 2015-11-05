@@ -33,5 +33,6 @@ void qre_dump(qre_node*);
 void qre_free(qre_t*);
 qre_node* qre_node_push_child(qre_node* parent, qre_node* child);
 qre_node* qre_node_new_children(qre_parser_ctx* ctx, qre_type_t type);
+qre_node* qre_node_new_str(qre_parser_ctx*, qre_type_t, const char*, size_t);
 
 #endif // QRE_H_
