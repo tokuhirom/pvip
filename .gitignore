@@ -5,3 +5,6 @@
 /t/c_level.t
 /log*
 /3rd/greg/greg.dSYM/
+*.dSYM
+/qre
+/src/qre/gen.qre.g.c
