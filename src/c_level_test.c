@@ -11,6 +11,8 @@ int main() {
 
     {
         PVIPString * x = PVIP_string_new();
+        x->buflen = 1; // shorten buffer length for testing
+
         PVIP_string_printf(x, "%d", 1);
         if (x->len==1 && memcmp(x->buf, "1", 1)==0) {
             printf("ok 1\n");
@@ -25,6 +27,7 @@ int main() {
             printf("ok 2\n");
         } else {
             printf("not ok 2\n");
+            printf("# len: %ld\n", x->len);
         }
 
         PVIP_string_destroy(x);

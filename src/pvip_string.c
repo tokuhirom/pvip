@@ -69,6 +69,9 @@ void PVIP_string_say(PVIPString *str) {
 }
 
 PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list ap) {
+    va_list copied;
+    va_copy(copied, ap); // copy original va_list
+
     int size = vsnprintf(str->buf + str->len, str->buflen - str->len, format, ap);
     if (size+1 > str->buflen - str->len) {
         str->buflen += size + 1;
@@ -76,7 +79,7 @@ PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list ap) {
         if (!str->buf) {
             return PVIP_FALSE;
         }
-        return PVIP_string_vprintf(str, format, ap);
+        return PVIP_string_vprintf(str, format, copied);
     }
     str->len += size;
     return PVIP_TRUE;
