@@ -11,6 +11,10 @@ int main(int argc, char **argv) {
     qre_t* qre = qre_new();
     PVIPString* error;
     qre_node* node = qre_parse(qre, argv[1], strlen(argv[1]), true, &error);
+    if (!node) {
+        PVIP_string_say(error);
+        exit(1);
+    }
     qre_dump(node);
     printf("\n");
     qre_free(qre);

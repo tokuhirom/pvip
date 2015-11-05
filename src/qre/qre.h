@@ -7,13 +7,30 @@
 struct qre_t;
 struct qre_node;
 typedef struct qre_t qre_t;
+
 typedef struct qre_node qre_node;
 
 typedef enum qre_type_t {
   QRE_NODE_ELEMS,
   QRE_NODE_STRING,
+  QRE_NODE_OR,
   QRE_NODE_NOP
 } qre_type_t;
+
+struct qre_node {
+  qre_type_t type;
+  union {
+    struct {
+        const char* ptr;
+        size_t len;
+    } str;
+    struct {
+        qre_node** nodes;
+        size_t size;
+    } children;
+  };
+};
+
 
 typedef struct {
     const char  *buf;

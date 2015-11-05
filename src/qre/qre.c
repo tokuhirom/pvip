@@ -10,20 +10,6 @@ typedef struct {
   size_t size;
 } qre_parent_node;
 
-struct qre_node {
-  qre_type_t type;
-  union {
-    struct {
-        const char* ptr;
-        size_t len;
-    } str;
-    struct {
-        qre_node** nodes;
-        size_t size;
-    } children;
-  };
-};
-
 #define ARENA_SIZE 256
 
 typedef struct arena_t {
@@ -60,6 +46,16 @@ static void dump(qre_node* node, int depth) {
             for (i=0; i<node->children.size; ++i) {
                 dump(node->children.nodes[i], depth+1);
             }
+            printf(")");
+            break;
+        }
+        case QRE_NODE_OR: {
+            printf("(or ");
+            int i;
+            for (i=0; i<node->children.size; ++i) {
+                dump(node->children.nodes[i], depth+1);
+            }
+            printf(")");
             break;
         }
         case QRE_NODE_STRING:
@@ -71,7 +67,6 @@ static void dump(qre_node* node, int depth) {
             printf("(nop)");
             break;
     }
-    printf(")");
 }
 
 void qre_dump(qre_node* node) {
@@ -89,6 +84,7 @@ void qre_free(qre_t* qre) {
                 free(node->str.ptr);
                 break;
             case QRE_NODE_ELEMS:
+            case QRE_NODE_OR:
                 free(node->children.nodes);
                 break;
             }

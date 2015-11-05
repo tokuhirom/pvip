@@ -39,25 +39,45 @@ comp_init = - e:elems - end-of-file {
 }
 
 elems = (
-        e1:elem {
+        e1:expr {
             $$ = qre_node_new_children(&(G->data), QRE_NODE_ELEMS);
             qre_node_push_child($$, e1);
             e1 = $$;
         }
         (
-            - e2:elem {
+            - e2:expr {
                 qre_node_push_child(e1, e2);
                 $$=e1;
             }
-        )*
+        )* {
+            if (e1->children.size == 1) {
+                $$ = e1->children.nodes[0];
+            }
+        }
     )
     | ws* { $$=NOP(); }
 
+expr = e1:elem {
+        $$ = qre_node_new_children(&(G->data), QRE_NODE_OR);
+        qre_node_push_child($$, e1);
+        e1 = $$;
+    } (
+        - '||' - e2:elem {
+            qre_node_push_child(e1, e2);
+            $$ = e1;
+        }
+    )* {
+        if (e1->children.size == 1) {
+            $$ = e1->children.nodes[0];
+        }
+    }
+
 elem =
-    <[A-Za-z0-9]+> {
+    '[' - e:elems - ']' { $$ = e; }
+    | <[A-Za-z0-9]+> {
         $$ = qre_node_new_str(&(G->data), QRE_NODE_STRING, yytext, yyleng);
     }
-    | <.> {
+    | <[^\]]> {
         $$ = qre_node_new_str(&(G->data), QRE_NODE_STRING, yytext, yyleng);
     }
 
@@ -122,4 +142,12 @@ finished:
     return root;
 }
 
+
+/*
+ TODO: [ paren ]
+ TODO: ( paren )
+ TODO: ( pa || ren )
+ TODO: <[ a b c ]>
+ TODO: # comment
+*/
 
