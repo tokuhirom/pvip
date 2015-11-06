@@ -14,7 +14,8 @@ typedef enum qre_type_t {
   QRE_NODE_ELEMS,
   QRE_NODE_STRING,
   QRE_NODE_OR,
-  QRE_NODE_NOP
+  QRE_NODE_NOP,
+  QRE_NODE_CAPTURE
 } qre_type_t;
 
 struct qre_node {

@@ -58,6 +58,15 @@ static void dump(qre_node* node, int depth) {
             printf(")");
             break;
         }
+        case QRE_NODE_CAPTURE: {
+            printf("(capture ");
+            int i;
+            for (i=0; i<node->children.size; ++i) {
+                dump(node->children.nodes[i], depth+1);
+            }
+            printf(")");
+            break;
+        }
         case QRE_NODE_STRING:
             printf("(string \"");
             fwrite(node->str.ptr, 1, node->str.len, stdout);
@@ -85,6 +94,7 @@ void qre_free(qre_t* qre) {
                 break;
             case QRE_NODE_ELEMS:
             case QRE_NODE_OR:
+            case QRE_NODE_CAPTURE:
                 free(node->children.nodes);
                 break;
             }

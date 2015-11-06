@@ -45,7 +45,7 @@ src/qre/gen.qre.g.c: src/qre/qre.g 3rd/greg/greg
 	./3rd/greg/greg -o src/qre/gen.qre.g.c src/qre/qre.g
 
 clean:
-	rm -f src/*.o src/gen.* pvip libpvip.a
+	rm -f src/*.o src/gen.* pvip libpvip.a qre
 
 .PHONY: all test
 

@@ -74,10 +74,11 @@ expr = e1:elem {
 
 elem =
     '[' - e:elems - ']' { $$ = e; }
-    | <[A-Za-z0-9]+> {
-        $$ = qre_node_new_str(&(G->data), QRE_NODE_STRING, yytext, yyleng);
+    | "(" - e:elems - ")" {
+        $$ = qre_node_new_children(&(G->data), QRE_NODE_CAPTURE);
+        qre_node_push_child($$, e);
     }
-    | <[^\]]> {
+    | <[A-Za-z0-9]+> {
         $$ = qre_node_new_str(&(G->data), QRE_NODE_STRING, yytext, yyleng);
     }
 

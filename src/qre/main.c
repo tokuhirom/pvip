@@ -50,13 +50,13 @@ int main(int argc, char **argv) {
         const char* filename = argv[optind];
         struct stat s;
         if (stat(filename, &s) != 0) {
-            fprintf(stderr, "There is no %s", filename);
+            fprintf(stderr, "There is no %s\n", filename);
             return 1;
         }
 
         FILE* fp = fopen(filename, "r");
         if (!fp) {
-            fprintf(stderr, "Cannot open file %s", filename);
+            fprintf(stderr, "Cannot open file %s\n", filename);
             return 1;
         }
 
