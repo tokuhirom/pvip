@@ -47,3 +47,8 @@ __END__
 --- expected
 (or (string "h")(string "oge"))
 
+===
+--- input: [h||oge]
+--- expected
+(or (string "h")(string "oge"))
+
