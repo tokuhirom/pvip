@@ -972,13 +972,13 @@ eat_terminator =
 
 dec_number =
     <[0-9]+ ( '.' [0-9]+ )? 'e' '-'? [0-9]+> {
-    $$ = PVIP_node_new_number(PVIP_NODE_NUMBER, yytext, yyleng);
+    $$ = PVIP_node_new_number(&(G->data), PVIP_NODE_NUMBER, yytext, yyleng);
 }
     | <([.][0-9]+)> {
-    $$ = PVIP_node_new_number(PVIP_NODE_NUMBER, yytext, yyleng);
+    $$ = PVIP_node_new_number(&(G->data), PVIP_NODE_NUMBER, yytext, yyleng);
 }
     | <([0-9]+ '.' [0-9]+)> {
-    $$ = PVIP_node_new_number(PVIP_NODE_NUMBER, yytext, yyleng);
+    $$ = PVIP_node_new_number(&(G->data), PVIP_NODE_NUMBER, yytext, yyleng);
 }
     | <([0-9_]+)> {
     $$ = PVIP_node_new_intf(&(G->data), PVIP_NODE_INT, yytext, yyleng, 10);
@@ -988,7 +988,7 @@ complex =
     < (
         [0-9]+ ('.' [0-9]+)?
         | ('.' [0-9]+)
-    ) > 'i' { $$ = PVIP_node_new_number(PVIP_NODE_COMPLEX, yytext, yyleng); }
+    ) > 'i' { $$ = PVIP_node_new_number(&(G->data), PVIP_NODE_COMPLEX, yytext, yyleng); }
 
 integer =
     '0b' <[01_]+> {

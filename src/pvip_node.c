@@ -185,8 +185,8 @@ void PVIP_node_change_type(PVIPNode *node, PVIP_node_type_t type) {
     node->type = type;
 }
 
-PVIPNode* PVIP_node_new_number(PVIP_node_type_t type, const char *str, size_t len) {
-    PVIPNode *node = malloc(sizeof(PVIPNode));
+PVIPNode* PVIP_node_new_number(PVIPParserContext* parser, PVIP_node_type_t type, const char *str, size_t len) {
+    PVIPNode *node = pvip_node_alloc(parser->pvip);
     assert(PVIP_node_category(type) == PVIP_CATEGORY_NUMBER);
     node->type = type;
     node->nv = strtod(str, NULL);

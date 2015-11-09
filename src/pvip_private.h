@@ -33,7 +33,7 @@ PVIPNode* PVIP_node_new_children5(PVIPParserContext*parser, PVIP_node_type_t typ
 PVIPNode* PVIP_node_new_int(PVIPParserContext* parser, PVIP_node_type_t type, int64_t n);
 PVIPNode* PVIP_node_new_intf(PVIPParserContext* parser, PVIP_node_type_t type, const char *str, size_t len, int base);
 PVIPNode* PVIP_node_new_string(PVIPParserContext* parser, PVIP_node_type_t type, const char* str, size_t len);
-PVIPNode* PVIP_node_new_number(PVIP_node_type_t type, const char *str, size_t len);
+PVIPNode* PVIP_node_new_number(PVIPParserContext* parser, PVIP_node_type_t type, const char *str, size_t len);
 
 void PVIP_node_push_child(PVIPNode* node, PVIPNode* child);
 
