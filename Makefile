@@ -17,7 +17,7 @@ libpvip.a: src/gen.pvip.y.o src/pvip.h src/pvip_node.o src/gen.node.o src/pvip_s
 src/qre/qre.o: src/qre/qre.c
 	$(CC) $(CFLAGS) -c -o src/qre/qre.o src/qre/qre.c
 
-test: pvip t/c_level.t
+test: pvip t/c_level.t qre
 	prove -lr t
 
 .c.o: src/pvip.h
