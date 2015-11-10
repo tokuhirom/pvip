@@ -20,6 +20,10 @@ add_custom_command(
     COMMAND ./greg -o src/gen.pvip.y.c src/pvip.y
     DEPENDS greg
     )
+add_custom_command(
+    OUTPUT src/gen.node.c
+    COMMAND perl build/node.pl
+    )
 
 # t/c_level.t
 add_executable(c_level_test src/c_level_test.c)
@@ -37,7 +41,7 @@ set_target_properties(pvip_exe
     RUNTIME_OUTPUT_DIRECTORY "./"
     OUTPUT_NAME "pvip")
 
-# make test ARGS="-V"
+# `make test ARGS="-V"` to run test cases in verbose mode
 add_test(NAME prove COMMAND prove)
 add_custom_target(prove DEPENDS c_level_test pvip_exe)
 
