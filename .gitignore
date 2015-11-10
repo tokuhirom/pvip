@@ -8,3 +8,11 @@
 *.dSYM
 /qre
 /src/qre/gen.qre.g.c
+/CMakeCache.txt
+/CMakeFiles/
+/CTestTestfile.cmake
+/Makefile
+/Testing/
+/cmake_install.cmake
+/greg
+
