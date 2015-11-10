@@ -14,20 +14,21 @@ SET(soserial "1")
 add_executable(greg 3rd/greg/greg.c 3rd/greg/tree.c 3rd/greg/compile.c)
 set_target_properties(greg PROPERTIES COMPILE_FLAGS "-g")
 
-add_library(libpvip STATIC src/pvip_node.c src/pvip_string.c src/gen.pvip.y.c src/gen.node.c)
+add_library(libpvip STATIC src/pvip_node.c src/pvip_string.c gen.pvip.y.c gen.node.c)
 set_target_properties(libpvip PROPERTIES OUTPUT_NAME "pvip")
 
 add_custom_command(
-    OUTPUT src/gen.pvip.y.c
-    COMMAND ./greg -o src/gen.pvip.y.c src/pvip.y
+    OUTPUT gen.pvip.y.c
+    COMMAND echo $(PROJECT_BINARY_DIR)
+    COMMAND ./greg -o gen.pvip.y.c ${PROJECT_SOURCE_DIR}/src/pvip.y
     DEPENDS greg
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     )
 add_custom_command(
-    OUTPUT src/gen.node.c
-    COMMAND perl build/node.pl
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    OUTPUT gen.node.c
+    COMMAND perl ${PROJECT_SOURCE_DIR}/build/node.pl ${PROJECT_SOURCE_DIR}/src/pvip.h gen.node.c 
     )
+
+# pvip-prefix/src/pvip-build/libpvip.a
 
 # t/c_level.t
 add_executable(c_level_test src/c_level_test.c)

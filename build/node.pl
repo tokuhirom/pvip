@@ -5,10 +5,13 @@ use utf8;
 use 5.010000;
 use autodie;
 
-open my $h, '<', 'src/pvip.h';
+my $in  = $ARGV[0] || "src/pvip.h";
+my $out = $ARGV[1] || "src/gen.node.c";
+
+open my $h, '<', $in or die "Cannot open $out: $!";
 
 {
-    open my $fh, '>', 'src/gen.node.c';
+    open my $fh, '>', $out or die "Cannot open $out: $!";
     say $fh qq!/* This file is generated from $0 */!;
     say $fh qq!#include "pvip.h"!;
     say $fh qq!const char* PVIP_node_name(PVIP_node_type_t t) {!;
