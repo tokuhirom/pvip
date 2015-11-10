@@ -5,6 +5,8 @@ use Test::More;
 use Test::Base::Less;
 use File::Temp;
 
+plan skip_all => "qre was suspended";
+
 plan tests => 1*blocks();
 
 filters {
