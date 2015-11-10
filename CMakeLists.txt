@@ -21,6 +21,7 @@ add_custom_command(
     OUTPUT src/gen.pvip.y.c
     COMMAND ./greg -o src/gen.pvip.y.c src/pvip.y
     DEPENDS greg
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     )
 add_custom_command(
     OUTPUT src/gen.node.c
