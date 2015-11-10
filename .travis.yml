@@ -2,4 +2,5 @@ sudo: false
 install:
   - curl -L http://cpanmin.us/ | perl - Data::Section::TestBase
 script:
+  - cmake .
   - PERL5LIB="$HOME/perl5/lib/perl5/" make test
