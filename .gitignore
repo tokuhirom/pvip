@@ -15,4 +15,4 @@
 /Testing/
 /cmake_install.cmake
 /greg
-
+gen.*.c
