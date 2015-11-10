@@ -22,7 +22,7 @@ add_custom_command(
     )
 add_custom_command(
     OUTPUT src/gen.node.c
-    COMMAND perl build/node.pl
+    COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/build/node.pl
     )
 
 # t/c_level.t
