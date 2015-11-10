@@ -3,6 +3,8 @@ project(pvip)
 
 enable_testing()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 SET(CMAKE_C_FLAGS_RELEASE "-W -O2 -g -Wno-unused-parameter -Wno-unused-function -Wno-sign-compare")
 SET(CMAKE_C_FLAGS_DEBUG   "-W -Wextra -Wno-unused-function -Wno-sign-compare -g -Werror")
 
