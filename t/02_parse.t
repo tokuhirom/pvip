@@ -8,6 +8,11 @@ __END__
 (statements (true))
 
 ===
+--- code: 3 // 4
+--- expected
+(statements (dor (int 3) (int 4)))
+
+===
 --- code: q@hoge@
 --- expected
 (statements (string "hoge"))

@@ -418,6 +418,7 @@ conditional_expr = e1:tight_or - '??' - e2:tight_or - '!!' - e3:tight_or { $$ = 
 tight_or = f1:tight_and (
         - '||' - f2:tight_and { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_LOGICAL_OR, f1, f2); f1 = $$; }
         | - '^^' - f2:tight_and { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_LOGICAL_XOR, f1, f2); f1 = $$; }
+        | - '//' - f2:tight_and { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_DOR, f1, f2); f1 = $$; }
     )* { $$ = f1; }
 
 tight_and = f1:chaining_infix_expr (
