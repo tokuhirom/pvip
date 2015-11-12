@@ -280,8 +280,8 @@ if_stmt = { if_body=NULL; } 'if' - if_cond:expr - '{' - if_body:statementlist? -
         (
             ws+ 'else' ws+ - '{' - else_body:statementlist? - '}' {
                 if (else_body) {
-                    PVIP_node_change_type(else_body, PVIP_NODE_ELSE);
-                    PVIP_node_push_child(if_cond, else_body);
+                    $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_ELSE, else_body);
+                    PVIP_node_push_child(if_cond, $$);
                 }
             }
         )? { $$=if_cond; }

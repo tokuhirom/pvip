@@ -13,6 +13,11 @@ __END__
 (statements (dor (int 3) (int 4)))
 
 ===
+--- code: if False { 3 } else { 3 }
+--- expected
+(statements (if (false) (statements (int 3)) (else (int 3))))
+
+===
 --- code: q@hoge@
 --- expected
 (statements (string "hoge"))
