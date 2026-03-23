@@ -47,6 +47,6 @@ set_target_properties(pvip_exe
     OUTPUT_NAME "pvip")
 
 # `make test ARGS="-V"` to run test cases in verbose mode
-add_test(NAME pvip-prove COMMAND prove)
+add_test(NAME pvip-prove COMMAND prove -I.)
 add_custom_target(pvip-prove DEPENDS c_level_test pvip_exe)
 
